@@ -2,8 +2,22 @@
 
   <div class="home">
     
-    <h3>Please login with your google account to continue</h3>
+    <!--
+      <h3>Please login with your google account to continue</h3>
     <button @click="login">Login with google</button>
+    -->
+
+    <div class="login">
+    <form @submit.prevent="logInWithEmail">
+      <label for="">
+        <input type="text" v-model="email">
+      </label>
+      <label for="">
+        <input type="password" v-model="password">
+      </label>
+      <input type="submit" value="Login">
+    </form>
+  </div>
     
 
     <!-- The surrounding HTML is left untouched by FirebaseUI.
@@ -21,6 +35,12 @@
   
 
   export default {
+    data() {
+      return {
+        email: '',
+        password: ''
+      }
+    },
     
     methods:{
 
@@ -58,7 +78,18 @@
           // ...
         });
 
-      }
+      },
+      logInWithEmail() {
+        firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+          .then( () =>  {
+            this.$router.replace('private')
+          })
+          .catch(function(error) {
+            console.log(error.message)
+          });
+    }
     },
     mounted(){
 		
