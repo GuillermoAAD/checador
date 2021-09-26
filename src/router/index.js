@@ -3,6 +3,9 @@ import VueRouter from 'vue-router'
 //import Home from '../views/Home.vue'
 import Checador from '../views/Checador.vue'
 import Login from '../views/Login.vue'
+import Signup from '../views/SignUp.vue'
+import LoginAdmin from '../views/LoginAdmin.vue'
+import ChecadorAdmin from '../views/ChecadorAdmin.vue'
 
 Vue.use(VueRouter)
 
@@ -17,6 +20,22 @@ const routes = [
     name: 'login',
     component: Login
   },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: Signup
+  },
+  {
+    path: '/loginAdmin',
+    name: 'loginAdmin',
+    component: LoginAdmin
+  },
+  {
+    path: '/checadorAdmin',
+    name: 'checadorAdmin',
+    component: ChecadorAdmin
+  },
+
   {
     path: '/about',
     name: 'About',

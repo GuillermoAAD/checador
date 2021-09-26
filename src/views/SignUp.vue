@@ -1,32 +1,28 @@
 <template>
-<!--
-  <div id="container" class="hide">
-    
-    <button @click="login">Login with google</button>
-    <br>
-    
-
-    <div class="login">
-    <form @submit.prevent="createWithEmail">
-      <label for="">
-        <input type="text" v-model="email">
-      </label>
-      <label for="">
-        <input type="password" v-model="password">
-      </label>
-      <input type="submit" value="Login">
-    </form>
-  </div>
-  -->
-    
-
-    <div class="container">
+  <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">Iniciar Sesión</div>
+          <div class="card-header">Registrarme</div>
           <div class="card-body">
-            <form action="#" @submit.prevent="logInEmail">
+            <form action="#" @submit.prevent="signUp">
+              <div class="form-group row">
+                <label for="name" class="col-md-4 col-form-label text-md-right">Nombre</label>
+
+                <div class="col-md-6">
+                  <input
+                    id="name"
+                    type="name"
+                    class="form-control"
+                    name="name"
+                    value
+                    required
+                    autofocus
+                    v-model="name"
+                  />
+                </div>
+              </div>
+
               <div class="form-group row">
                 <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
 
@@ -38,7 +34,6 @@
                     name="email"
                     value
                     required
-                    autofocus
                     v-model="email"
                   />
                 </div>
@@ -54,6 +49,7 @@
                     class="form-control"
                     name="password"
                     required
+                    minlength="6"
                     v-model="password"
                   />
                 </div>
@@ -61,7 +57,7 @@
 
               <div class="form-group row mb-0">
                 <div class="col-md-8 offset-md-4">
-                  <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                  <button type="submit" class="btn btn-primary">Registrarme</button>
                 </div>
               </div>
             </form>
@@ -70,8 +66,8 @@
       </div>
     </div>
 
-    <br>
-    
+
+
     <div class="or-container">
       <div class="line-separator"></div>
       <div class="or-label">o</div>
@@ -80,29 +76,50 @@
     <div class="row">
       <div class="col-md-12">
         <a class="btn btn-lg btn-google btn-block btn-outline" 
-        href="#" @click="logInGoogle">
+        href="#" @click="signUpGoogle">
           <img src="https://img.icons8.com/color/16/000000/google-logo.png"> 
-          Iniciar sesión con Google
+          Registrarme con Google
         </a> 
       </div>
     </div>
   </div>
 </template>
+<!--<template>
+  <div id="container" class="hide">
+    <div class="login">
+    <form @submit.prevent="createWithEmail">
+      <label for="Email">Email:</label>
+      <br>
+      <input id="Email" type="text" v-model="email">
+      <br>
+      <label for="Password">Contraseña:</label>
+      <br>
+      <input id="Password" type="password" v-model="password">
+      <br>
+      <br>
+      <input type="submit" value="Registrarse">
+    </form>
+  </div>    
+  </div>
+</template>-->
 
 <script>
-  import firebase from 'firebase';  
+  import firebase from 'firebase'; 
+  //require('../utils/errorCodesAuth.js'); 
+  var errorCodesAuth = require('../utils/errorCodesAuth.js');
+
 
   export default {
     data() {
       return {
+        name: '',
         email: '',
         password: ''
       }
     },
     
     methods:{
-
-      logInGoogle(){
+      signUpGoogle(){
         var provider = new firebase.auth.GoogleAuthProvider();
 
         firebase.auth()
@@ -133,35 +150,38 @@
           var email = error.email;
           // The firebase.auth.AuthCredential type that was used.
           var credential = error.credential;
-          // ...
           alert(errorCode + '\n' + errorMessage);
+          // ...
         });
 
       },
-      
-      logInEmail() {
+
+      signUp() {
         firebase.auth()
-        .signInWithEmailAndPassword(this.email, this.password)
-        .then( (userCredential) => {
-          // Signed in
+        .createUserWithEmailAndPassword(this.email, this.password)
+        .then((userCredential) => {
+          // Registrado
           var user = userCredential.user;
+
+          //Se agrega el nombre de usuario
+          user.updateProfile({ displayName: this.name});
           // ...
-          
+          console.log("CREO USUARIO");
           this.$router.replace('/');
-          
         })
-        .catch(function(error) {
+        .catch((error) => {
           var errorCode = error.code;
           var errorMessage = error.message;
           //console.log(error.message)
           //console.log(error.code);
+          //console.log(errorCodesAuth.getError(error.code));
+          //alert(errorCodesAuth.getError(error.code));
           alert(errorCode + '\n' + errorMessage);
+          // ..
         });
       },
 
-      
     },
-
 
     mounted(){
     },
@@ -183,8 +203,8 @@
           //this.$router.replace('/');
           next('/');
         }else{
-          // /let divContainer = document.getElementById("container");
-          // /divContainer.style.display = "inline";
+          //let divContainer = document.getElementById("container");
+          //divContainer.style.display = "inline";
           
           //next('/');
         }

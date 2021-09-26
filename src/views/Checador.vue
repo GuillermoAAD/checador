@@ -1,7 +1,7 @@
 <template>
 
-<!--<div class="container">-->
-<div class="">
+<!--<div name="container" class="container">-->
+<div name="container" id="container" class="">
   <h3 class=" text-center">Checador</h3>
   <!--LOGOUT-->
   <div class="">
@@ -33,7 +33,10 @@
 </template>
 
 <script>
+//require("../firebase.js");
 import firebase, { auth } from 'firebase'
+
+// /const db = firebase.firestore();
 
 export default {
   name: 'Checador',
@@ -172,13 +175,21 @@ export default {
       // o se deslogeo y  regrese a la pagina de login
       firebase.auth().onAuthStateChanged(user=>{
         if(user){
-          next();
+          //next('/');
+          //let divContainer = document.getElementById("container");
+          //divContainer.style.display = "inline";
+
         }else{
-          setTimeout(()=>{
-            vm.$router.push('/login');
+          //let divContainer = document.getElementById("container");
+          //divContainer.style.display = "none";
+
+          next('/login');
+
+          //setTimeout(()=>{
+            //vm.$router.push('/login');
             // Cierra todas las conexiones abiertas
-            location.reload();
-          },500);
+            //location.reload();
+          //},100);
         }
       })
     })
@@ -212,6 +223,10 @@ img{ max-width:100%;}
 
 .name {
   text-transform: capitalize;
+}
+
+.hide{
+  display: none;
 }
 
 </style>

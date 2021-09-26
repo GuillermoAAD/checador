@@ -24,7 +24,7 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">Iniciar Sesión</div>
+          <div class="card-header">Iniciar Sesión (ADMIN)</div>
           <div class="card-body">
             <form action="#" @submit.prevent="logInEmail">
               <div class="form-group row">
@@ -119,7 +119,7 @@
 
           //Guardar los datos del usuario en la coleccion users
 
-          this.$router.push('/');
+          this.$router.push('/checadorAdmin');
           //this.$router.push('/').catch(()=>{});
           //if (this.$router.path != '/login') {
             //this.$router.push('/login')
@@ -147,7 +147,7 @@
           var user = userCredential.user;
           // ...
           
-          this.$router.replace('/');
+          this.$router.replace('/checadorAdmin');
           
         })
         .catch(function(error) {
@@ -181,7 +181,7 @@
           //let divContainer = document.getElementById("container");
           // /divContainer.style.display = "none";
           //this.$router.replace('/');
-          next('/');
+          next('/checadorAdmin');
         }else{
           // /let divContainer = document.getElementById("container");
           // /divContainer.style.display = "inline";
