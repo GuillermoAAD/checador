@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Iniciar Sesión</router-link> |
-      <router-link to="/signup">Registrarme</router-link>
+      <router-link to="/login">Iniciar Sesión</router-link> |
+      <router-link to="/signup">Registrarme</router-link> |
+      <router-link to="/loginAdmin">ADMIN</router-link>
     </div>
     <router-view/>
   </div>

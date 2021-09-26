@@ -161,6 +161,13 @@
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((userCredential) => {
           // Registrado
+          /*PARA MANDAR CORREO??
+          if(user && user.emailVerified === false){
+            user.sendEmailVerification().then(function(){
+              console.log("email verification sent to user");
+            });
+          }
+          */
           var user = userCredential.user;
 
           //Se agrega el nombre de usuario
