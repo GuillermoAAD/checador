@@ -43,7 +43,8 @@
 
 <script>
 //require("../firebase.js");
-import firebase, { auth } from 'firebase'
+//import firebase, { auth } from 'firebase'
+import firebase from 'firebase'; 
 
 // /const db = firebase.firestore();
 
