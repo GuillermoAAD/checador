@@ -1,6 +1,8 @@
 <template>
   <div id="app">
     <div id="nav">
+      <img class="logo" src="http://www.perspective.com.mx/assets/img/logo.png">
+      <br>
       <router-link to="/login">Iniciar Sesión</router-link> |
       <router-link to="/signup">Registrarme</router-link> |
       <router-link to="/loginAdmin">ADMIN</router-link>
@@ -29,5 +31,9 @@
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+
+.logo {
+  height: 100px;
 }
 </style>

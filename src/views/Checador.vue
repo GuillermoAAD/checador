@@ -5,7 +5,7 @@
   <h3 class=" text-center">Checador</h3>
   <!--LOGOUT-->
   <div class="">
-    <button @click="logout" class="exit_btn" type="button"><i aria-hidden="true">SALIR</i></button>
+    <button @click="logout" class="exit_btn btn btn-dark" type="button"><i aria-hidden="true">SALIR</i></button>
   </div>
   
   <div class="">
@@ -13,7 +13,7 @@
     Hola <span class="name">{{usr_name}}</span>
     </p>
     
-    <input type="radio" id="llegada" value="llegada" v-model="picked">
+    <input type="radio" id="llegada" value="llegada" v-model="picked" checked>
     <label for="llegada">Entrada</label>
     <br>
     <input type="radio" id="salida" value="salida" v-model="picked">
@@ -21,9 +21,16 @@
     <br>
     <textarea v-model="note" placeholder="Si desea, agregue una nota."></textarea>
     <br>
+    <label for="BTNchecar">Presione para mostrar ubicación.</label><br>
+    <button @click="checkLocation" class="btn btn-dark" type="button" id="BTNchecar">
+      <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+    </button>
+    <br>
+    <div id="map"></div>
+    <br>
     
     <label for="BTNchecar">Presione para guardar registro.</label><br>
-    <button @click="checkRecord" class="" type="button" id="BTNchecar">
+    <button @click="checkRecord" class="btn btn-dark" type="button" id="BTNchecar">
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
     
@@ -45,7 +52,7 @@ export default {
   data() {
      return {
         note:null,
-        picked:null,
+        picked:"llegada",
         authUser:null,
         usr_name:null,
         position:null,
@@ -78,8 +85,13 @@ export default {
       db.collection("users").doc(this.authUser.uid).set({
         id: this.authUser.uid,
         name: this.authUser.displayName,
+        email: this.authUser.email,
         registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
+    },
+
+    checkRecord() {
+      this.getCurrentPosition();
     },
 
     getCurrentPosition() {
@@ -91,7 +103,7 @@ export default {
           //myPosition = navigator.geolocation.getCurrentPosition(
           position => {
 
-            this.saveRecord(this.authUser.uid,position);
+            this.saveRecord(this.authUser.uid, position);
             
             //console.log('Tu posición actual es:');
             //console.log('Latitud : ' + position.coords.latitude);
@@ -103,6 +115,26 @@ export default {
         /* la geolocalización NO está disponible */
         console.log("NO SE PUDO GEOLOCALIZAR");
       }
+    },
+
+    checkLocation() {
+      if ('geolocation' in navigator) {
+        /* la geolocalización está disponible */
+        console.log("SE PUEDE GEOLOCALIZAR");
+        navigator.geolocation.getCurrentPosition(
+          //myPosition = navigator.geolocation.getCurrentPosition(
+          position => {
+            console.log('Tu posición actual es:');
+            console.log('Latitud : ' + position.coords.latitude);
+            //console.log('Longitud: ' + position.coords.longitude);
+            //console.log('Más o menos ' + position.coords.accuracy + ' metros.'); 
+          }
+        );
+      } else {
+        /* la geolocalización NO está disponible */
+        console.log("NO SE PUDO GEOLOCALIZAR");
+      }
+
     },
 
     drawMap(position){
@@ -122,36 +154,17 @@ export default {
             })
     },
 
-    checkRecord() {
-      this.getCurrentPosition();
-    },
-
     saveRecord(id_user,position) {
       db.collection('record').doc(id_user).collection('records').doc().set ({
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: Date.now(),
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
         type: this.picked,
         note: this.note,
       });
-    },
 
-    saveArrival(myPosition) {
-      db.collection('e').add ({
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        latitude: myPosition.coords.latitude,
-        longitude: myPosition.coords.longitude,
-        note: this.note,
-      });
-    },
-
-    saveDeparture() {
-      db.collection('arrivals').add ({
-        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        latitude: myPosition.coords.latitude,
-        longitude: myPosition.coords.longitude,
-        note: this.note,
-      });
+      this.note = null;
     },
   },
 
@@ -208,8 +221,7 @@ export default {
 }
 img{ max-width:100%;}
 
-.exit_btn {
-  background: #05728f none repeat scroll 0 0;
+.exit_btn {  
   border: medium none;
   border-radius: 7%;
   color: #fff;
@@ -227,7 +239,11 @@ img{ max-width:100%;}
 }
 
 .hide{
-  display: none;
+  visibility: hidden;
 }
+
+#map {
+    height: 100%;
+  }
 
 </style>

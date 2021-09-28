@@ -168,13 +168,24 @@
             });
           }
           */
+
+          //firebase.auth().currentUser.sendEmailVerification()
+          // /.then(() => {
+          // Email verification sent!
+          // ...
+          // /});
+          
           var user = userCredential.user;
 
           //Se agrega el nombre de usuario
-          user.updateProfile({ displayName: this.name});
+          user.updateProfile({ 
+            displayName: this.name
+          });
+
+
           // ...
-          console.log("CREO USUARIO");
-          this.$router.replace('/');
+          console.log(user.displayName);
+          //this.$router.replace('/');
         })
         .catch((error) => {
           var errorCode = error.code;

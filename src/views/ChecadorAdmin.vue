@@ -3,41 +3,59 @@
 <!--<div name="container" class="container">-->
 <div name="container" id="container" class="">
   <h3 class=" text-center">Checador (ADMIN)</h3>
-  <!--LOGOUT-->
+  <!-- LOGOUT-->
   <div class="">
-    <button @click="logout" class="exit_btn" type="button"><i aria-hidden="true">SALIR</i></button>
+    <button @click="logout" class="exit_btn btn btn-dark" type="button"><i aria-hidden="true">SALIR</i></button>
   </div>
   
   <div class="">
+    <!-- SALUDO -->
     <p>
-    Hola <span class="name">{{usr_name}}</span>
-		
+    Hola <span class="capitalize">{{usr_name}}</span>
     </p>
 
-		 <div class="">
-        <div id="">
-          <div  v-for="user in users" :key="user.id">
-            <h5>
-							<a @click="getRecord(user.id)">
-								{{user.id}}
-							{{user.name}}
-							</a>
-							<div  v-for="record in records" :key="record.id">
-								xd
-							</div>
-            </h5>
-          </div>
-					<div  v-for="record in records" :key="record.id">
-								xd
-							</div>
-
-				</div>
+    <!-- SELECT de usuarios -->
+		<div class="">
+      <div id="">
+        <label for="selectUser">Seleccione a un usuario:</label>
+        <br>
+        <select v-model="selected" id="selectUser" @change="selectUser1" class="">
+          <option value="unselected">
+            Sin seleccionar
+          </option>
+          <option v-for="user in users" :key="user.id" v-bind:value="user">
+						{{user.name}}
+          </option>
+        </select>
 			</div>
+		</div>
 
-    
-		
   </div>
-  <div id="mapcanvas" style="width:400px; height:400px"></div>
+
+  <!-- TABLA -->
+  <div id="divtable" class="container mt-3 hide">
+    <div class="table-responsive">
+      <table class="table table-striped table-dark text-white table-hover" >  
+        <tr>
+          <th colspan="5">{{selected.name}}</th>
+        </tr>
+        <tr>
+          <th>Tipo</th>
+          <th>Fecha/Hora</th>
+          <th>Latitud</th>
+          <th>Longitud</th>
+          <th>Nota</th>
+        </tr>
+        <tr v-for="record in records" :key="record.id">
+          <td>{{record.type.toUpperCase()}}</td>
+          <td>{{new Date(record.timestamp).toLocaleString()}}</td>
+          <td>{{record.latitude}}</td>
+          <td>{{record.longitude}}</td>
+          <td>{{record.note}}</td>            
+        </tr>
+      </table>
+    </div>
+  </div>  
 </div>
 </template>
 
@@ -55,17 +73,15 @@ export default {
      return {
         users:null,
 				records:null,
+        selected:"unselected",
 
-
-        note:null,
-        picked:null,
+        //note:null,
         authUser:null,
         usr_name:null,
-        position:null,
+        //position:null,
      }
   },
   methods: {
-
     logout(){
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
@@ -91,6 +107,7 @@ export default {
       db.collection("users").doc(this.authUser.uid).set({
         id: this.authUser.uid,
         name: this.authUser.displayName,
+        email: this.authUser.email,
         registeredAt: firebase.firestore.FieldValue.serverTimestamp(),
       });
     },
@@ -108,6 +125,7 @@ export default {
             var allUsers=[];
             querySnapshot.forEach((doc) => {
               allUsers.push(doc.data());
+              console.log("USUARIO:");
 							console.log(doc.data());
             });
             this.users=allUsers;
@@ -118,20 +136,78 @@ export default {
         }
       });
     },
- 
-		getRecord3(id_user) {
-			console.log("HOLO");
+    
+
+    selectUser1() {
+      
+      if(this.selected.id !== undefined) {
+        this.getRecords(this.selected.id);
+        this.tableVisible(true);
+      } else {
+        this.tableVisible(false);
+      }
+
+    },
+
+    tableVisible(flag) {
+      let divTable = document.getElementById("divtable");
+      if (flag == true) {
+       divTable.style.visibility = "visible";
+      } else {
+        divTable.style.visibility = "hidden";
+      }
+
+    },
+
+
+    /*
+    selectUser(id_user) {
+
+      console.log("selectUser(): ", id_user);
+      this.getRecords(id_user);
+    },
+    */
+    
+		getRecords(id_user) {
+			console.log("getRecords(): ", id_user);
+      const recordRef = db.collection('record').doc(id_user).collection('records');
+      
+      recordRef
+      .orderBy('timestamp','desc')
+      .get().then((querySnapshot) => {
+        let allRecords = [];
+        querySnapshot.forEach((doc1) => {
+          console.log(doc1.data());
+          allRecords.push(doc1.data());
+        });
+
+        this.records = allRecords;
+
+
+        //if (doc.exists) {
+          //console.log("Document data:", doc.data());
+        //} else {
+          // doc.data() will be undefined in this case
+          //console.log("No such document!");
+        //}
+			}).catch((error) => {
+        console.log("Error getting document:", error);
+      });
+      
 		},
 
-    getRecord(id_user) {
+    getRecord2(id_user) {
 			console.log("getRecord");	
 			console.log(id_user);
 			const recordRef = db.collection('record').doc(id_user).collection('records');
-			recordRef
-			.get().then((querySnapshot) => {
-				querySnapshot.forEach((doc) => {
-					console.log(doc.data());
-				});
+			recordRef.get().then((querySnapshot) => {
+        if (doc.exists) {
+          console.log("Document data:", doc.data());
+        } else {
+            // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+				
 				
 			});
 
@@ -201,14 +277,13 @@ export default {
 
 
 <style scoped="">
-.container{
+.container1{
   max-width:1170px;
   margin:auto;
 }
 img{ max-width:100%;}
 
-.exit_btn {
-  background: #05728f none repeat scroll 0 0;
+.exit_btn {  
   border: medium none;
   border-radius: 7%;
   color: #fff;
@@ -221,12 +296,34 @@ img{ max-width:100%;}
   width: 77px;
 }
 
-.name {
+.capitalize {
   text-transform: capitalize;
 }
 
 .hide{
-  display: none;
+  visibility: hidden;
 }
+
+
+
+body {
+    background: #eee
+}
+
+/*
+table {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+  border: 3px solid purple;
+}
+tr {
+  border: 3px solid red;
+}
+th, td {
+  border: 3px solid green;
+}
+*/
+
 
 </style>
