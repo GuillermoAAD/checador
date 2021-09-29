@@ -40,6 +40,7 @@
             <th>Fecha/Hora</th>
             <th>Nota</th>
             <th>LatitudLongitud/</th>
+            <th></th>
           </tr>
         </thead>
 
@@ -47,8 +48,13 @@
           <tr v-for="record in records" :key="record.id">
             <td>{{record.type.toUpperCase()}}</td>
             <td>{{new Date(record.timestamp).toLocaleString()}}</td>
-            <td>{{record.note}}</td>    
-            <td>{{record.latitude}}, {{record.longitude}}</td>        
+            <td>{{record.note}}</td>
+            <td>{{record.latitude}}, {{record.longitude}}</td>
+            <th>
+              <button @click="deleteRecord(record)" class="btn btn-link text-danger" type="button" id="BTNeliminar">
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </th>
           </tr>
         </tbody>
       </table>
@@ -161,8 +167,8 @@ export default {
         );
       } else {
         /* la geolocalización NO está disponible */
-        console.log("NO SE PUDO GEOLOCALIZAR");
-        alert("NO SE PUDO GEOLOCALIZAR");
+        //console.log("NO SE PUDO GEOLOCALIZAR");
+        alert("Geolocalizacion rechazada.");
       }
     },
 
@@ -205,8 +211,31 @@ export default {
             })
     },
     */
+   generateSubCollectionDocID(id_user, collectionName, subcollectionName){
+      let ref = db.collection(collectionName).doc(id_user).collection(subcollectionName).doc();
+      let id_group = ref.id;
+      return id_group;
+    },
 
     saveRecord(id_user,position) {
+      let id_record = this.generateSubCollectionDocID(id_user,"record","records");
+      db.collection('record').doc(id_user).collection('records').doc(id_record).set ({
+        
+        id: id_record,
+        //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestamp: Date.now(),
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        type: this.picked,
+        note: this.note,
+      });
+      alert("Has checado tu " + this.picked + ". \n\n ^‿^");
+      this.note = null;
+      this.picked = "llegada";
+    },
+
+    /*
+    saveRecord1(id_user,position) {
       db.collection('record').doc(id_user).collection('records').doc().set ({
         //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
         timestamp: Date.now(),
@@ -215,14 +244,11 @@ export default {
         type: this.picked,
         note: this.note,
       });
-
-      
-
       alert("Has checado tu " + this.picked + ". \n\n ^‿^");
       this.note = null;
       this.picked = "llegada";
-      
     },
+    */
 
     getRecords(id_user) {
 			//console.log("getRecords(): ", id_user);
@@ -240,6 +266,34 @@ export default {
         this.records = allRecords;
 			});
 		},
+
+    deleteRecord(record) {
+      console.log("record", record.doc);
+      let deleteRec = confirm("Esta a punto de eliminar el registro con los siguientes datos:\n"
+        + "\nTipo: " + record.type
+        + "\nFecha/Hora: " + new Date(record.timestamp).toLocaleString()
+        + "\nNota: " + record.note
+        + "\nLatitud: " + record.latitude
+        + "\nLongitud: " + record.longitude
+        );
+
+      if(deleteRec) {
+        //borrar en firebase
+        this.deleteRecordFB(this.authUser.uid, record.id);
+        
+      }
+    },
+
+    deleteRecordFB(id_user,id_record) {
+      const recordRef = db.collection('record').doc(id_user).collection('records').doc(id_record);
+      recordRef.delete().then(() => {
+            console.log("Document successfully deleted!");
+        }).catch((error) => {
+            //console.error("Error removing document: ", error);
+            alert(error);
+        });
+    },
+
   },
 
   created(){

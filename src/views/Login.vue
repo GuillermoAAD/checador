@@ -49,7 +49,7 @@
             <div class="form-group row mb-0">
               <div class="col-md-8 offset-md-4">
                 <div class="media-body">
-                  <a @click="restorePassword" href="#" class="stretched-link">Reestablecer Contraseña</a>
+                  <a @click="restorePassword" href="" class="link-info">Restablecer Contraseña</a>
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <a class="btn btn-lg btn-google btn-block btn-outline" 
+        <a class="loginGoogle" class="btn btn-lg btn-google btn-block btn-outline" 
         href="#" @click="logInGoogle">
           <img src="https://img.icons8.com/color/16/000000/google-logo.png"> 
           Iniciar sesión con Google
@@ -232,8 +232,9 @@
     text-align: center
 }
 
-a:hover{
+a:hover.loginGoogle{
   background: rgb(236, 236, 236);
 }
+
 
 </style>
