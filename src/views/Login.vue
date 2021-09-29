@@ -43,6 +43,17 @@
                 </div>
               </div>
             </form>
+
+            <br>
+
+            <div class="form-group row mb-0">
+              <div class="col-md-8 offset-md-4">
+                <div class="media-body">
+                  <a @click="restorePassword" href="#" class="stretched-link">Reestablecer Contraseña</a>
+                </div>
+              </div>
+            </div>
+
           </div>
           
         </div>
@@ -138,6 +149,25 @@
         });
       },
 
+      restorePassword(){
+        let sendMSG = confirm("¿Mandar correo de reestablecimiento de contraseña a " + this.email + "?");
+
+        if (sendMSG == true ){
+          firebase.auth().sendPasswordResetEmail(this.email)
+          .then(() => {
+            // Password reset email sent!
+            alert("Correo de reestablecimiento de contraseña enviado al correo " + this.email);
+            // ..
+          })
+          .catch((error) => {
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            alert(errorCode + '\n' + errorMessage);
+            // ..
+          });
+        }
+      },
+
       
     },
 
@@ -172,6 +202,7 @@
   }
 
   }
+
 </script>
 
 
