@@ -146,6 +146,7 @@ export default {
         if ('geolocation' in navigator) {
         /* la geolocalización está disponible */
         console.log("SE PUEDE GEOLOCALIZAR");
+
         navigator.geolocation.getCurrentPosition(
           //myPosition = navigator.geolocation.getCurrentPosition(
           position => {
@@ -161,6 +162,7 @@ export default {
       } else {
         /* la geolocalización NO está disponible */
         console.log("NO SE PUDO GEOLOCALIZAR");
+        alert("NO SE PUDO GEOLOCALIZAR");
       }
     },
 
