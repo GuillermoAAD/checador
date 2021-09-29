@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <div class="card">
+        <div class="card text-white bg-dark">
           <div class="card-header">Registrarme</div>
           <div class="card-body">
             <form action="#" @submit.prevent="signUp">
@@ -57,7 +57,7 @@
 
               <div class="form-group row mb-0">
                 <div class="col-md-8 offset-md-4">
-                  <button type="submit" class="btn btn-primary">Registrarme</button>
+                  <button type="submit" class="btn btn-info">Registrarme</button>
                 </div>
               </div>
             </form>
@@ -67,7 +67,7 @@
     </div>
 
 
-
+    <!--
     <div class="or-container">
       <div class="line-separator"></div>
       <div class="or-label">o</div>
@@ -78,30 +78,14 @@
         <a class="btn btn-lg btn-google btn-block btn-outline" 
         href="#" @click="signUpGoogle">
           <img src="https://img.icons8.com/color/16/000000/google-logo.png"> 
-          Registrarme con Google
+          Iniciar con Google
         </a> 
       </div>
     </div>
+    -->
+
   </div>
 </template>
-<!--<template>
-  <div id="container" class="hide">
-    <div class="login">
-    <form @submit.prevent="createWithEmail">
-      <label for="Email">Email:</label>
-      <br>
-      <input id="Email" type="text" v-model="email">
-      <br>
-      <label for="Password">Contraseña:</label>
-      <br>
-      <input id="Password" type="password" v-model="password">
-      <br>
-      <br>
-      <input type="submit" value="Registrarse">
-    </form>
-  </div>    
-  </div>
-</template>-->
 
 <script>
   import firebase from 'firebase'; 
@@ -112,9 +96,9 @@
   export default {
     data() {
       return {
-        name: '',
-        email: '',
-        password: ''
+        name: null,
+        email: null,
+        password: null
       }
     },
     
@@ -161,7 +145,8 @@
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((userCredential) => {
           // Registrado
-          /*PARA MANDAR CORREO??
+          //PARA MANDAR CORREO??
+          /*
           if(user && user.emailVerified === false){
             user.sendEmailVerification().then(function(){
               console.log("email verification sent to user");
@@ -185,7 +170,7 @@
 
           // ...
           console.log(user.displayName);
-          //this.$router.replace('/');
+          this.$router.replace('/');
         })
         .catch((error) => {
           var errorCode = error.code;

@@ -10,32 +10,51 @@
   
   <div class="">
     <p>
-    Hola <span class="name">{{usr_name}}</span>
+    Hola <span class="capitalize">{{usr_name}}</span>.
     </p>
-    
+    Seleccione:
     <input type="radio" id="llegada" value="llegada" v-model="picked" checked>
-    <label for="llegada">Entrada</label>
-    <br>
+    <label for="llegada">Llegada</label>
+    ó
     <input type="radio" id="salida" value="salida" v-model="picked">
     <label for="salida">Salida</label>
     <br>
     <textarea v-model="note" placeholder="Si desea, agregue una nota."></textarea>
     <br>
-    <label for="BTNchecar">Presione para mostrar ubicación.</label><br>
-    <button @click="checkLocation" class="btn btn-dark" type="button" id="BTNchecar">
+    <button @click="checkRecord" class="btn btn-success" type="button" id="BTNchecar">
+      Checar registro
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
-    <br>
-    <div id="map"></div>
-    <br>
-    
-    <label for="BTNchecar">Presione para guardar registro.</label><br>
-    <button @click="checkRecord" class="btn btn-dark" type="button" id="BTNchecar">
-      <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
-    </button>
-    
   </div>
-  <div id="mapcanvas" style="width:400px; height:400px"></div>
+  
+  <div id="div-table" class="container mt-3 hide">
+    <div class="table-responsive">
+      <table class="table table-striped table-dark text-white table-hover table-sm" >  
+        <thead class="thead-dark">
+          <tr>
+            <th colspan="4">MIS REGISTROS</th>
+          </tr>
+        
+          <tr>
+            <th>Tipo</th>
+            <th>Fecha/Hora</th>
+            <th>Nota</th>
+            <th>LatitudLongitud/</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="record in records" :key="record.id">
+            <td>{{record.type.toUpperCase()}}</td>
+            <td>{{new Date(record.timestamp).toLocaleString()}}</td>
+            <td>{{record.note}}</td>    
+            <td>{{record.latitude}}, {{record.longitude}}</td>        
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>  
+  
 </div>
 </template>
 
@@ -56,9 +75,37 @@ export default {
         authUser:null,
         usr_name:null,
         position:null,
+
+        records:null,
      }
   },
   methods: {
+    elementVisible(elementName, flag) {
+      let element = document.getElementById(elementName);
+      if (flag == true) {
+       element.style.visibility = "visible";
+      } else {
+        element.style.visibility = "hidden";
+      }
+    },
+
+    routesVisible(flag) {
+      let divRoutes = document.getElementById("div-routes");
+      if (flag == true) {
+       divRoutes.style.visibility = "visible";
+      } else {
+        divRoutes.style.visibility = "hidden";
+      }
+    },
+
+    tableVisible(flag) {
+      let divTable = document.getElementById("div-table");
+      if (flag == true) {
+       divTable.style.visibility = "visible";
+      } else {
+        divTable.style.visibility = "hidden";
+      }
+    },
 
     logout(){
       firebase.auth().signOut().then(() => {
@@ -117,9 +164,10 @@ export default {
       }
     },
 
+    /*
     checkLocation() {
       if ('geolocation' in navigator) {
-        /* la geolocalización está disponible */
+        // la geolocalización está disponible 
         console.log("SE PUEDE GEOLOCALIZAR");
         navigator.geolocation.getCurrentPosition(
           //myPosition = navigator.geolocation.getCurrentPosition(
@@ -131,12 +179,13 @@ export default {
           }
         );
       } else {
-        /* la geolocalización NO está disponible */
+        // la geolocalización NO está disponible 
         console.log("NO SE PUDO GEOLOCALIZAR");
       }
-
     },
+    */
 
+    /*
     drawMap(position){
            var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             var myOptions = {
@@ -153,6 +202,7 @@ export default {
               title:"Estás aquí! (en un radio de "+position.coords.accuracy+" metros)"
             })
     },
+    */
 
     saveRecord(id_user,position) {
       db.collection('record').doc(id_user).collection('records').doc().set ({
@@ -164,19 +214,51 @@ export default {
         note: this.note,
       });
 
+      
+
+      alert("Has checado tu " + this.picked + ". \n\n ^‿^");
       this.note = null;
+      this.picked = "llegada";
+      
     },
+
+    getRecords(id_user) {
+			//console.log("getRecords(): ", id_user);
+      const recordRef = db.collection('record').doc(id_user).collection('records');
+      
+      recordRef
+      .orderBy('timestamp','desc')
+      //.get().then((querySnapshot) => {
+      .onSnapshot((querySnapshot)=>{
+        let allRecords = [];
+        querySnapshot.forEach((doc1) => {
+          //console.log(doc1.data());
+          allRecords.push(doc1.data());
+        });
+        this.records = allRecords;
+			});
+		},
   },
 
   created(){
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
+        //this.routesVisible(false);
+        //this.tableVisible(true);
+        this.elementVisible("div-routes", false);
+        this.elementVisible("div-table", true);
+        
+        
         this.authUser = user;
         this.usr_name = user.displayName.toLowerCase();
-        
         //Revisa si tengo guardado el usuario logeado en la BD
         this.checkUser();
+        this.getRecords(this.authUser.uid);
       }else{
+        //this.routesVisible(true);
+        //this.tableVisible(false);
+        this.elementVisible("div-routes", true);
+        this.elementVisible("div-table", false);
         //console.log("ESTE MENSAJE SE VE CUANDO SALE");
         this.authUser=null;
       }
@@ -190,14 +272,13 @@ export default {
       firebase.auth().onAuthStateChanged(user=>{
         if(user){
           //next('/');
-          //let divContainer = document.getElementById("container");
-          //divContainer.style.display = "inline";
-
         }else{
           //let divContainer = document.getElementById("container");
           //divContainer.style.display = "none";
+          
 
           next('/login');
+          
 
           //setTimeout(()=>{
             //vm.$router.push('/login');
@@ -222,6 +303,7 @@ export default {
 img{ max-width:100%;}
 
 .exit_btn {  
+  /*background-color: #563d7c;*/
   border: medium none;
   border-radius: 7%;
   color: #fff;
@@ -234,7 +316,7 @@ img{ max-width:100%;}
   width: 77px;
 }
 
-.name {
+.capitalize {
   text-transform: capitalize;
 }
 
@@ -242,8 +324,6 @@ img{ max-width:100%;}
   visibility: hidden;
 }
 
-#map {
-    height: 100%;
-  }
+
 
 </style>

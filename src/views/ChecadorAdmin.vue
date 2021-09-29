@@ -11,7 +11,7 @@
   <div class="">
     <!-- SALUDO -->
     <p>
-    Hola <span class="capitalize">{{usr_name}}</span>
+    Hola <span class="capitalize">{{usr_name}}</span>.
     </p>
 
     <!-- SELECT de usuarios -->
@@ -19,7 +19,7 @@
       <div id="">
         <label for="selectUser">Seleccione a un usuario:</label>
         <br>
-        <select v-model="selected" id="selectUser" @change="selectUser1" class="">
+        <select v-model="selected" id="selectUser" @change="selectUser" class="">
           <option value="unselected">
             Sin seleccionar
           </option>
@@ -33,26 +33,30 @@
   </div>
 
   <!-- TABLA -->
-  <div id="divtable" class="container mt-3 hide">
+  <div id="div-table" class="container mt-3 hide">
     <div class="table-responsive">
-      <table class="table table-striped table-dark text-white table-hover" >  
-        <tr>
-          <th colspan="5">{{selected.name}}</th>
-        </tr>
-        <tr>
-          <th>Tipo</th>
-          <th>Fecha/Hora</th>
-          <th>Latitud</th>
-          <th>Longitud</th>
-          <th>Nota</th>
-        </tr>
-        <tr v-for="record in records" :key="record.id">
-          <td>{{record.type.toUpperCase()}}</td>
-          <td>{{new Date(record.timestamp).toLocaleString()}}</td>
-          <td>{{record.latitude}}</td>
-          <td>{{record.longitude}}</td>
-          <td>{{record.note}}</td>            
-        </tr>
+      <table class="table table-striped table-dark text-white table-hover table-sm" >  
+        <thead class="thead-dark">
+          <tr>
+            <th colspan="4">{{selected.name}}</th>
+          </tr>
+
+          <tr>
+            <th>Tipo</th>
+            <th>Fecha/Hora</th>
+            <th>Nota</th>
+            <th>LatitudLongitud/</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="record in records" :key="record.id">
+            <td>{{record.type.toUpperCase()}}</td>
+            <td>{{new Date(record.timestamp).toLocaleString()}}</td>
+            <td>{{record.note}}</td>    
+            <td>{{record.latitude}}, {{record.longitude}}</td>           
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>  
@@ -82,6 +86,26 @@ export default {
      }
   },
   methods: {
+    /*
+    routesVisible(flag) {
+      let divRoutes = document.getElementById("div-routes");
+      if (flag == true) {
+       divRoutes.style.visibility = "visible";
+      } else {
+        divRoutes.style.visibility = "hidden";
+      }
+    },
+    */
+
+    elementVisible(elementName, flag) {
+      let element = document.getElementById(elementName);
+      if (flag == true) {
+       element.style.visibility = "visible";
+      } else {
+        element.style.visibility = "hidden";
+      }
+    },
+
     logout(){
       firebase.auth().signOut().then(() => {
         // Sign-out successful.
@@ -136,35 +160,26 @@ export default {
         }
       });
     },
-    
 
-    selectUser1() {
-      
+    selectUser() {
       if(this.selected.id !== undefined) {
         this.getRecords(this.selected.id);
-        this.tableVisible(true);
+        //this.tableVisible(true);
+        this.elementVisible("div-table", true)
       } else {
-        this.tableVisible(false);
+        //this.tableVisible(false);
+        this.elementVisible("div-table", false)
       }
-
     },
 
+    /*
     tableVisible(flag) {
-      let divTable = document.getElementById("divtable");
+      let divTable = document.getElementById("div-table");
       if (flag == true) {
        divTable.style.visibility = "visible";
       } else {
         divTable.style.visibility = "hidden";
       }
-
-    },
-
-
-    /*
-    selectUser(id_user) {
-
-      console.log("selectUser(): ", id_user);
-      this.getRecords(id_user);
     },
     */
     
@@ -180,56 +195,18 @@ export default {
           console.log(doc1.data());
           allRecords.push(doc1.data());
         });
-
         this.records = allRecords;
-
-
-        //if (doc.exists) {
-          //console.log("Document data:", doc.data());
-        //} else {
-          // doc.data() will be undefined in this case
-          //console.log("No such document!");
-        //}
 			}).catch((error) => {
         console.log("Error getting document:", error);
       });
-      
 		},
-
-    getRecord2(id_user) {
-			console.log("getRecord");	
-			console.log(id_user);
-			const recordRef = db.collection('record').doc(id_user).collection('records');
-			recordRef.get().then((querySnapshot) => {
-        if (doc.exists) {
-          console.log("Document data:", doc.data());
-        } else {
-            // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-				
-				
-			});
-
-			/*
-			this.records = null;		
-      db.collection('record').doc(id_user).collection('records')
-			.orderBy('timestamp','desc')
-			.get().then((querySnapshot) => {
-				var allRecords=[];
-				querySnapshot.forEach((doc) => {
-          allRecords.push(doc.data());
-					console.log(doc.data());
-        });
-        this.records=allRecords;
-			
-			*/
-    },
   },
 
   created(){
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
+        //this.routesVisible(false);
+        this.elementVisible("div-routes", false)
         this.authUser = user;
         this.usr_name = user.displayName.toLowerCase();
         
@@ -238,6 +215,8 @@ export default {
 				//this.getRecord(user.uid);
 				
       }else{
+        //this.routesVisible(true);
+        this.elementVisible("div-routes", false)
         //console.log("ESTE MENSAJE SE VE CUANDO SALE");
         this.authUser=null;
       }
