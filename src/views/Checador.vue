@@ -1,7 +1,7 @@
 <template>
 
 <!--<div name="container" class="container">-->
-<div name="container" id="container" class="">
+<div name="container" id="container" class="hide">
   <h3 class=" text-center">Checador</h3>
   <!--LOGOUT-->
   <div class="">
@@ -243,10 +243,15 @@ export default {
   created(){
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
+        setTimeout(()=>{
+            this.elementVisible("container", true)
+            this.elementVisible("div-table", true);
+          },1000);
         //this.routesVisible(false);
+
         //this.tableVisible(true);
         this.elementVisible("div-routes", false);
-        this.elementVisible("div-table", true);
+        
         
         
         this.authUser = user;
@@ -257,6 +262,7 @@ export default {
       }else{
         //this.routesVisible(true);
         //this.tableVisible(false);
+        this.elementVisible("container", false)
         this.elementVisible("div-routes", true);
         this.elementVisible("div-table", false);
         //console.log("ESTE MENSAJE SE VE CUANDO SALE");
@@ -272,19 +278,20 @@ export default {
       firebase.auth().onAuthStateChanged(user=>{
         if(user){
           //next('/');
+          //this.elementVisible("div-routes", false);
+          
         }else{
           //let divContainer = document.getElementById("container");
           //divContainer.style.display = "none";
+          //next('/login');//BUENO
           
 
-          next('/login');
-          
-
-          //setTimeout(()=>{
+          setTimeout(()=>{
+            next('/login');
             //vm.$router.push('/login');
             // Cierra todas las conexiones abiertas
-            //location.reload();
-          //},100);
+            location.reload();
+          },100);
         }
       })
     })

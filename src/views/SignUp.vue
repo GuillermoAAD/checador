@@ -205,6 +205,7 @@
           // /divContainer.style.display = "none";
           //this.$router.replace('/');
           next('/');
+          location.reload();
         }else{
           //let divContainer = document.getElementById("container");
           //divContainer.style.display = "inline";

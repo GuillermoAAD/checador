@@ -1,7 +1,7 @@
 <template>
 
 <!--<div name="container" class="container">-->
-<div name="container" id="container" class="">
+<div name="container" id="container" class="hide">
   <h3 class=" text-center">Checador (ADMIN)</h3>
   <!-- LOGOUT-->
   <div class="">
@@ -205,6 +205,8 @@ export default {
   created(){
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
+        
+        this.elementVisible("container", true)  
         //this.routesVisible(false);
         this.elementVisible("div-routes", false)
         this.authUser = user;
@@ -216,6 +218,7 @@ export default {
 				
       }else{
         //this.routesVisible(true);
+        this.elementVisible("container", false)
         this.elementVisible("div-routes", false)
         //console.log("ESTE MENSAJE SE VE CUANDO SALE");
         this.authUser=null;
@@ -233,18 +236,21 @@ export default {
           //next('/');
           //let divContainer = document.getElementById("container");
           //divContainer.style.display = "inline";
+          
+          //this.elementVisible("container", true)
 
         }else{
           //let divContainer = document.getElementById("container");
           //divContainer.style.display = "none";
+          //this.elementVisible("container", false)
 
-          next('/loginAdmin');
+          //next('/loginAdmin');BUENO
 
-          //setTimeout(()=>{
-            //vm.$router.push('/login');
+          setTimeout(()=>{
+            next('/loginAdmin');
             // Cierra todas las conexiones abiertas
-            //location.reload();
-          //},100);
+            location.reload();
+          },100);
         }
       })
     })
