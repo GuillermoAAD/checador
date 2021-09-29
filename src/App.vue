@@ -2,7 +2,9 @@
   <div id="app">
     <div id="nav">
       <router-link to="/">
-        <img class="logo" src="http://www.perspective.com.mx/assets/img/logo.png">
+        <!--<img class="logo" src="https://www.perspective.com.mx/assets/img/logo.png">-->
+        <img class="logo" src="./assets/logo.png">
+        
       </router-link>
       <div id="div-routes">
         <router-link to="/login">Iniciar Sesión</router-link> |
