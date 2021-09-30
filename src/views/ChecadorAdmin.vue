@@ -218,10 +218,10 @@ export default {
 
         if (this.records.length > 0) {
           this.elementVisible("tr-no-records", false);
-          this.elementVisible("td-no-records", false);
+          //this.elementVisible("td-no-records", false);
         } else {
           this.elementVisible("tr-no-records", true);
-          this.elementVisible("td-no-records", true);
+          //this.elementVisible("td-no-records", true);
         }
 			}).catch((error) => {
         console.log("Error getting document:", error);

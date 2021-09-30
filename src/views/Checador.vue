@@ -301,7 +301,10 @@ export default {
 
       let deleteRec = confirm("Esta a punto de eliminar el registro con los siguientes datos:\n"
         + "\nTipo: " + record.type
-        + "\nFecha/Hora: " + new Date(record.timestamp).toLocaleString()
+        //HORA DISPOSITIVO
+        //+ "\nFecha/Hora: " + new Date(record.timestamp).toLocaleString()
+        //HORA SERVER
+        + "\nFecha/Hora: " + record.timestampServer.toDate().toLocaleString()
         + "\nNota: " + nota
         + "\nLatitud: " + record.latitude
         + "\nLongitud: " + record.longitude
