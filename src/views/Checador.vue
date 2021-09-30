@@ -294,10 +294,15 @@ export default {
 		},
 
     deleteRecord(record) {
+      let nota = record.note;
+      if (nota === null) {
+        nota = "";
+      }
+
       let deleteRec = confirm("Esta a punto de eliminar el registro con los siguientes datos:\n"
         + "\nTipo: " + record.type
         + "\nFecha/Hora: " + new Date(record.timestamp).toLocaleString()
-        + "\nNota: " + record.note
+        + "\nNota: " + nota
         + "\nLatitud: " + record.latitude
         + "\nLongitud: " + record.longitude
         );
