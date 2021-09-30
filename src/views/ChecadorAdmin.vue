@@ -52,7 +52,12 @@
         <tbody>
           <tr v-for="record in records" :key="record.id">
             <td>{{record.type.toUpperCase()}}</td>
-            <td>{{new Date(record.timestamp).toLocaleString()}}</td>
+            <td>
+              <!--HORA DISPOSITIVO-->
+              <!--{{new Date(record.timestamp).toLocaleString()}}<br>-->
+              <!--HORA SERVER-->
+              {{record.timestampServer.toDate().toLocaleString()}}
+            </td>
             <td>{{record.note}}</td>    
             <td>{{record.latitude}}, {{record.longitude}}</td>           
           </tr>

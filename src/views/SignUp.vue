@@ -154,11 +154,11 @@
           }
           */
 
-          //firebase.auth().currentUser.sendEmailVerification()
-          // /.then(() => {
+          firebase.auth().currentUser.sendEmailVerification()
+          .then(() => {
           // Email verification sent!
           // ...
-          // /});
+          });
           
           var user = userCredential.user;
 

@@ -39,7 +39,7 @@
       <table class="table table-striped table-dark text-white table-hover table-sm" >  
         <thead class="thead-dark">
           <tr>
-            <th colspan="4">MIS REGISTROS</th>
+            <th colspan="5">MIS REGISTROS</th>
           </tr>
         
           <tr>
@@ -54,7 +54,12 @@
         <tbody>
           <tr v-for="record in records" :key="record.id">
             <td>{{record.type.toUpperCase()}}</td>
-            <td>{{new Date(record.timestamp).toLocaleString()}}</td>
+            <td>
+              <!--HORA DISPOSITIVO-->
+              <!--{{new Date(record.timestamp).toLocaleString()}}<br>-->
+              <!--HORA SERVER-->
+              {{record.timestampServer.toDate().toLocaleString()}}
+            </td>
             <td>{{record.note}}</td>
             <td>{{record.latitude}}, {{record.longitude}}</td>
             <th>
@@ -242,7 +247,7 @@ export default {
       db.collection('record').doc(id_user).collection('records').doc(id_record).set ({
         
         id: id_record,
-        //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+        timestampServer: firebase.firestore.FieldValue.serverTimestamp(),
         timestamp: Date.now(),
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
