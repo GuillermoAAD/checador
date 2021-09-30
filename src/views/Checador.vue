@@ -153,9 +153,15 @@ export default {
         if ('geolocation' in navigator) {
         /* la geolocalización está disponible */
         //console.log("SE PUEDE GEOLOCALIZAR");
+        let options = {
+              enableHighAccuracy: true, // Alta precisión
+              maximumAge: 0, // No queremos caché
+              timeout: 5000 // Esperar solo 5 segundos
+            }
 
         navigator.geolocation.getCurrentPosition(
           //myPosition = navigator.geolocation.getCurrentPosition(
+            
           position => {
 
             this.saveRecord(this.authUser.uid, position);
@@ -164,7 +170,13 @@ export default {
             //console.log('Latitud : ' + position.coords.latitude);
             //console.log('Longitud: ' + position.coords.longitude);
             //console.log('Más o menos ' + position.coords.accuracy + ' metros.'); 
-          }
+          },
+
+          function(msg){
+            console.error( msg );
+          },
+
+          options
         );
       } else {
         /* la geolocalización NO está disponible */
