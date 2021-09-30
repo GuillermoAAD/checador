@@ -45,7 +45,7 @@
             <th>Tipo</th>
             <th>Fecha/Hora</th>
             <th>Nota</th>
-            <th>LatitudLongitud/</th>
+            <th>Latitud/Longitud</th>
           </tr>
         </thead>
 
@@ -149,8 +149,8 @@ export default {
             var allUsers=[];
             querySnapshot.forEach((doc) => {
               allUsers.push(doc.data());
-              console.log("USUARIO:");
-							console.log(doc.data());
+              //console.log("USUARIO:");
+							//console.log(doc.data());
             });
             this.users=allUsers;
           });
@@ -184,7 +184,7 @@ export default {
     */
     
 		getRecords(id_user) {
-			console.log("getRecords(): ", id_user);
+			//console.log("getRecords(): ", id_user);
       const recordRef = db.collection('record').doc(id_user).collection('records');
       
       recordRef
@@ -192,7 +192,7 @@ export default {
       .get().then((querySnapshot) => {
         let allRecords = [];
         querySnapshot.forEach((doc1) => {
-          console.log(doc1.data());
+          // /console.log(doc1.data());
           allRecords.push(doc1.data());
         });
         this.records = allRecords;

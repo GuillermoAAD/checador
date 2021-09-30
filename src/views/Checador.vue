@@ -39,7 +39,7 @@
             <th>Tipo</th>
             <th>Fecha/Hora</th>
             <th>Nota</th>
-            <th>LatitudLongitud/</th>
+            <th>Latitud/Longitud</th>
             <th></th>
           </tr>
         </thead>
@@ -83,6 +83,7 @@ export default {
         position:null,
 
         records:null,
+        first_record:null,
      }
   },
   methods: {
@@ -151,7 +152,7 @@ export default {
       //if (navigator.geolocation) {
         if ('geolocation' in navigator) {
         /* la geolocalización está disponible */
-        console.log("SE PUEDE GEOLOCALIZAR");
+        //console.log("SE PUEDE GEOLOCALIZAR");
 
         navigator.geolocation.getCurrentPosition(
           //myPosition = navigator.geolocation.getCurrentPosition(
@@ -168,7 +169,7 @@ export default {
       } else {
         /* la geolocalización NO está disponible */
         //console.log("NO SE PUDO GEOLOCALIZAR");
-        alert("Geolocalizacion rechazada.");
+        alert("Geolocalizacion NO disponible.");
       }
     },
 
@@ -231,7 +232,7 @@ export default {
       });
       alert("Has checado tu " + this.picked + ". \n\n ^‿^");
       this.note = null;
-      this.picked = "llegada";
+      //this.picked = "llegada";
     },
 
     /*
@@ -250,8 +251,54 @@ export default {
     },
     */
 
+    /*
+    async getRecords1(id_user) {
+      const r = await this.getRecordsFB(id_user);      
+		},
+    */
+
+    /*
+    getRecordsFB1(id_user) {
+      return new Promise(resolve => {
+        //console.log("getRecords(): ", id_user);
+        const recordRef = db.collection('record').doc(id_user).collection('records');
+        
+        recordRef
+        .orderBy('timestamp','desc')
+        //.get().then((querySnapshot) => {
+        .onSnapshot((querySnapshot)=>{
+          let allRecords = [];
+          querySnapshot.forEach((doc1) => {
+            //console.log(doc1.data());
+            allRecords.push(doc1.data());
+          });
+          this.records = allRecords;
+
+          this.first_record = this.records[0];
+          this.setPicked(this.first_record);
+          resolve('resolved');
+        });
+      });
+		},
+    */
+
+    setPicked(firstRecord){
+      //console.log("FR 0", firstRecord);
+      if (firstRecord.type == 'llegada') {
+        this.picked = 'salida';
+      } else { 
+        this.picked = 'llegada';
+      }
+    },
+
+
+    //getRecordsSINASYNC(id_user) {
     getRecords(id_user) {
-			//console.log("getRecords(): ", id_user);
+      this.getRecordsFB(id_user);
+		},
+
+    //getRecordsFBSINASYNC(id_user) {
+    getRecordsFB(id_user) {
       const recordRef = db.collection('record').doc(id_user).collection('records');
       
       recordRef
@@ -264,11 +311,15 @@ export default {
           allRecords.push(doc1.data());
         });
         this.records = allRecords;
+
+        if(this.records.length > 0) {
+          this.first_record = this.records[0];
+          this.setPicked(this.first_record);
+        }
 			});
 		},
 
     deleteRecord(record) {
-      console.log("record", record.doc);
       let deleteRec = confirm("Esta a punto de eliminar el registro con los siguientes datos:\n"
         + "\nTipo: " + record.type
         + "\nFecha/Hora: " + new Date(record.timestamp).toLocaleString()
@@ -280,7 +331,6 @@ export default {
       if(deleteRec) {
         //borrar en firebase
         this.deleteRecordFB(this.authUser.uid, record.id);
-        
       }
     },
 
@@ -315,6 +365,7 @@ export default {
         //Revisa si tengo guardado el usuario logeado en la BD
         this.checkUser();
         this.getRecords(this.authUser.uid);
+        
       }else{
         //this.routesVisible(true);
         //this.tableVisible(false);
