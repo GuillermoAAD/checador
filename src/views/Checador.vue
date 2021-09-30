@@ -2,13 +2,13 @@
 
 <!--<div name="container" class="container">-->
 <div name="container" id="container" class="hide">
-  <h3 class=" text-center">Checador</h3>
+  <h3 class="text-white text-center">Checador</h3>
   <!--LOGOUT-->
   <div class="">
     <button @click="logout" class="exit_btn btn btn-dark" type="button"><i aria-hidden="true">SALIR</i></button>
   </div>
   
-  <div class="">
+  <div class="text-white">
     <p>
     Hola <span class="capitalize">{{usr_name}}</span>.
     </p>
@@ -21,10 +21,17 @@
     <br>
     <textarea v-model="note" placeholder="Si desea, agregue una nota."></textarea>
     <br>
+    
     <button @click="checkRecord" class="btn btn-success" type="button" id="BTNchecar">
       Checar registro
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
+    <!--
+    <button @click="checkRecord" class="btn btn-dark  text-success" type="button" id="BTNchecar">
+      Checar registro
+      <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+    </button>
+    -->
   </div>
   
   <div id="div-table" class="container mt-3 hide">
@@ -247,53 +254,6 @@ export default {
       //this.picked = "llegada";
     },
 
-    /*
-    saveRecord1(id_user,position) {
-      db.collection('record').doc(id_user).collection('records').doc().set ({
-        //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        timestamp: Date.now(),
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        type: this.picked,
-        note: this.note,
-      });
-      alert("Has checado tu " + this.picked + ". \n\n ^‿^");
-      this.note = null;
-      this.picked = "llegada";
-    },
-    */
-
-    /*
-    async getRecords1(id_user) {
-      const r = await this.getRecordsFB(id_user);      
-		},
-    */
-
-    /*
-    getRecordsFB1(id_user) {
-      return new Promise(resolve => {
-        //console.log("getRecords(): ", id_user);
-        const recordRef = db.collection('record').doc(id_user).collection('records');
-        
-        recordRef
-        .orderBy('timestamp','desc')
-        //.get().then((querySnapshot) => {
-        .onSnapshot((querySnapshot)=>{
-          let allRecords = [];
-          querySnapshot.forEach((doc1) => {
-            //console.log(doc1.data());
-            allRecords.push(doc1.data());
-          });
-          this.records = allRecords;
-
-          this.first_record = this.records[0];
-          this.setPicked(this.first_record);
-          resolve('resolved');
-        });
-      });
-		},
-    */
-
     setPicked(firstRecord){
       //console.log("FR 0", firstRecord);
       if (firstRecord.type == 'llegada') {
@@ -303,19 +263,14 @@ export default {
       }
     },
 
-
-    //getRecordsSINASYNC(id_user) {
     getRecords(id_user) {
       this.getRecordsFB(id_user);
 		},
-
-    //getRecordsFBSINASYNC(id_user) {
+    
     getRecordsFB(id_user) {
       const recordRef = db.collection('record').doc(id_user).collection('records');
-      
       recordRef
       .orderBy('timestamp','desc')
-      //.get().then((querySnapshot) => {
       .onSnapshot((querySnapshot)=>{
         let allRecords = [];
         querySnapshot.forEach((doc1) => {
@@ -327,6 +282,8 @@ export default {
         if(this.records.length > 0) {
           this.first_record = this.records[0];
           this.setPicked(this.first_record);
+        } else {
+          this.picked = 'llegada';
         }
 			});
 		},
@@ -365,12 +322,7 @@ export default {
             this.elementVisible("container", true)
             this.elementVisible("div-table", true);
           },1000);
-        //this.routesVisible(false);
-
-        //this.tableVisible(true);
         this.elementVisible("div-routes", false);
-        
-        
         
         this.authUser = user;
         this.usr_name = user.displayName.toLowerCase();
@@ -379,12 +331,10 @@ export default {
         this.getRecords(this.authUser.uid);
         
       }else{
-        //this.routesVisible(true);
-        //this.tableVisible(false);
         this.elementVisible("container", false)
         this.elementVisible("div-routes", true);
         this.elementVisible("div-table", false);
-        //console.log("ESTE MENSAJE SE VE CUANDO SALE");
+        
         this.authUser=null;
       }
     })

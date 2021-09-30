@@ -2,13 +2,13 @@
 
 <!--<div name="container" class="container">-->
 <div name="container" id="container" class="hide">
-  <h3 class=" text-center">Checador (ADMIN)</h3>
+  <h3 class="text-white text-center">Checador (ADMIN)</h3>
   <!-- LOGOUT-->
   <div class="">
     <button @click="logout" class="exit_btn btn btn-dark" type="button"><i aria-hidden="true">SALIR</i></button>
   </div>
   
-  <div class="">
+  <div class="text-white">
     <!-- SALUDO -->
     <p>
     Hola <span class="capitalize">{{usr_name}}</span>.
@@ -55,6 +55,10 @@
             <td>{{new Date(record.timestamp).toLocaleString()}}</td>
             <td>{{record.note}}</td>    
             <td>{{record.latitude}}, {{record.longitude}}</td>           
+          </tr>
+
+          <tr id="tr-no-records">
+            <td id="th-no-records" colspan="4">Registros no encontrados.</td>
           </tr>
         </tbody>
       </table>
@@ -103,6 +107,15 @@ export default {
        element.style.visibility = "visible";
       } else {
         element.style.visibility = "hidden";
+      }
+    },
+
+    rowTableVisible(elementName, flag) {
+      let element = document.getElementById(elementName);
+      if (flag == true) {
+       element.style.visibility = "table-row";
+      } else {
+        element.style.visibility = "none";
       }
     },
 
@@ -196,6 +209,15 @@ export default {
           allRecords.push(doc1.data());
         });
         this.records = allRecords;
+        //console.log("length",this.records.length);
+
+        if (this.records.length > 0) {
+          this.elementVisible("tr-no-records", false);
+          this.elementVisible("td-no-records", false);
+        } else {
+          this.elementVisible("tr-no-records", true);
+          this.elementVisible("td-no-records", true);
+        }
 			}).catch((error) => {
         console.log("Error getting document:", error);
       });
@@ -206,9 +228,9 @@ export default {
     firebase.auth().onAuthStateChanged(user=>{
       if(user){
         
-        this.elementVisible("container", true)  
+        this.elementVisible("container", true);
         //this.routesVisible(false);
-        this.elementVisible("div-routes", false)
+        this.elementVisible("div-routes", false);
         this.authUser = user;
         this.usr_name = user.displayName.toLowerCase();
         

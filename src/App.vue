@@ -24,6 +24,7 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  
 }
 
 #nav {
@@ -41,5 +42,11 @@
 
 .logo {
   height: 100px;
+}
+
+body {
+  /*background-color: #ffffff;*/
+  background: linear-gradient(to top, #32383e,#1a1d1f 50%);
+  background-attachment:fixed;
 }
 </style>
