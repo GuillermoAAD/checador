@@ -189,6 +189,7 @@ export default {
           "iPad": /iPad/i,
           "iPhone": /iPhone/i,
           "iPod": /iPod/i,
+          "iOS": /iOS/i,
           "macOS": /Macintosh/i,
           "Windows": /IEMobile|Windows/i,
           "Zebra": /TC70|TC55/i,
