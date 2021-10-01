@@ -38,7 +38,7 @@
       <table class="table table-striped table-dark text-white table-hover table-sm" >  
         <thead class="thead-dark">
           <tr>
-            <th colspan="4">{{selected.name}}</th>
+            <th colspan="5">{{selected.name}}</th>
           </tr>
 
           <tr>
@@ -46,6 +46,7 @@
             <th>Fecha/Hora</th>
             <th>Nota</th>
             <th>Latitud/Longitud</th>
+            <th>Dispositivo</th>
           </tr>
         </thead>
 
@@ -58,8 +59,9 @@
               <!--HORA SERVER-->
               {{record.timestampServer.toDate().toLocaleString()}}
             </td>
-            <td>{{record.note}}</td>    
-            <td>{{record.latitude}}, {{record.longitude}}</td>           
+            <td>{{record.note}}</td>
+            <td>{{record.latitude}}, {{record.longitude}}</td>
+            <td>{{record.device}}</td>
           </tr>
 
           <tr id="tr-no-records">

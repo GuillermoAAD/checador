@@ -27,10 +27,13 @@
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
 
+    <!--
     <button @click="checkDevice" class="btn btn-success" type="button" id="BTNchecar">
       Checar dispositivo
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
+    -->
+
     <!--
     <button @click="checkRecord" class="btn btn-dark  text-success" type="button" id="BTNchecar">
       Checar registro
@@ -44,7 +47,7 @@
       <table class="table table-striped table-dark text-white table-hover table-sm" >  
         <thead class="thead-dark">
           <tr>
-            <th colspan="5">MIS REGISTROS</th>
+            <th colspan="6">MIS REGISTROS</th>
           </tr>
         
           <tr>
@@ -52,6 +55,7 @@
             <th>Fecha/Hora</th>
             <th>Nota</th>
             <th>Latitud/Longitud</th>
+            <th>Dispositivo</th>
             <th></th>
           </tr>
         </thead>
@@ -67,11 +71,12 @@
             </td>
             <td>{{record.note}}</td>
             <td>{{record.latitude}}, {{record.longitude}}</td>
-            <th>
+            <td>{{record.device}}</td>
+            <td>
               <button @click="deleteRecord(record)" class="btn btn-link text-danger" type="button" id="BTNeliminar">
                 <i class="far fa-trash-alt"></i>
               </button>
-            </th>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -189,9 +194,8 @@ export default {
           "Zebra": /TC70|TC55/i,
       }
       Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
-      alert(device);
-      //return device;
-      
+      //alert(device);
+      return device;
     },
 
     getCurrentPosition() {
@@ -287,6 +291,7 @@ export default {
         longitude: position.coords.longitude,
         type: this.picked,
         note: this.note,
+        device: this.checkDevice()
       });
       alert("Has checado tu " + this.picked + ". \n\n ^‿^");
       this.note = null;
