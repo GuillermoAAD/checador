@@ -166,11 +166,31 @@ export default {
     },
 
     checkDevice() {
-      let device1 = navigator.userAgent;
-      let device = navigator.platform;
-      console.log(device);
+      // /let device1 = navigator.userAgent;
+      //let device = navigator.platform;
+      //console.log(device);
+      //alert(device);
+      //alert(device1);
+
+      let device = "Unknown";
+      const ua = {
+          "Generic Linux": /Linux/i,
+          "Android": /Android/i,
+          "BlackBerry": /BlackBerry/i,
+          "Bluebird": /EF500/i,
+          "Chrome OS": /CrOS/i,
+          "Datalogic": /DL-AXIS/i,
+          "Honeywell": /CT50/i,
+          "iPad": /iPad/i,
+          "iPhone": /iPhone/i,
+          "iPod": /iPod/i,
+          "macOS": /Macintosh/i,
+          "Windows": /IEMobile|Windows/i,
+          "Zebra": /TC70|TC55/i,
+      }
+      Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
       alert(device);
-      alert(device1);
+      //return device;
       
     },
 
