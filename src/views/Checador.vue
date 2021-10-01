@@ -195,7 +195,19 @@ export default {
           "Zebra": /TC70|TC55/i,
       }
       Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
-      alert(navigator.userAgent);
+      //alert(navigator.userAgent);
+
+      alert(navigator.platform);
+      
+
+      if (device == "macOS") {
+        let isIOS = /iPad|iPhone|iPod/.test(navigator.platform)
+        || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);  
+
+        device = "iOS";
+        //const isMobile = window.matchMedia("only screen and (max-width: 760px)").matches;
+
+      }
       
       return device;
     },
