@@ -338,6 +338,11 @@ export default {
         nota = "";
       }
 
+      let device = record.device;
+      if (device === null) {
+        device = "";
+      }
+
       let deleteRec = confirm("Esta a punto de eliminar el registro con los siguientes datos:\n"
         + "\nTipo: " + record.type
         //HORA DISPOSITIVO
@@ -347,7 +352,7 @@ export default {
         + "\nNota: " + nota
         + "\nLatitud: " + record.latitude
         + "\nLongitud: " + record.longitude
-        + "\nDispositivo: " + record.device
+        + "\nDispositivo: " + device
         );
 
       if(deleteRec) {
