@@ -5,7 +5,9 @@
   <h3 class="text-white text-center">Checador (ADMIN)</h3>
   <!-- LOGOUT-->
   <div class="">
-    <button @click="logout" class="exit_btn btn btn-dark" type="button"><i aria-hidden="true">SALIR</i></button>
+    <button @click="logout" class="exit_btn btn btn-dark" type="button">
+      <i aria-hidden="true">SALIR</i>
+    </button>
   </div>
   
   <div class="text-white">

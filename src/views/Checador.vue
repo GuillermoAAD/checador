@@ -347,6 +347,7 @@ export default {
         + "\nNota: " + nota
         + "\nLatitud: " + record.latitude
         + "\nLongitud: " + record.longitude
+        + "\nDispositivo: " + record.device
         );
 
       if(deleteRec) {
