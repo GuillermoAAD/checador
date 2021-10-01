@@ -166,9 +166,11 @@ export default {
     },
 
     checkDevice() {
+      let device1 = navigator.userAgent;
       let device = navigator.platform;
       console.log(device);
       alert(device);
+      alert(device1);
       
     },
 
