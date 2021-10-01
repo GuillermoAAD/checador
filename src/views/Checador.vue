@@ -195,7 +195,8 @@ export default {
           "Zebra": /TC70|TC55/i,
       }
       Object.keys(ua).map(v => navigator.userAgent.match(ua[v]) && (device = v));
-      //alert(device);
+      alert(navigator.userAgent);
+      
       return device;
     },
 
