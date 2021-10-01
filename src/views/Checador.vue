@@ -26,6 +26,11 @@
       Checar registro
       <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
     </button>
+
+    <button @click="checkDevice" class="btn btn-success" type="button" id="BTNchecar">
+      Checar dispositivo
+      <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+    </button>
     <!--
     <button @click="checkRecord" class="btn btn-dark  text-success" type="button" id="BTNchecar">
       Checar registro
@@ -158,6 +163,13 @@ export default {
 
     checkRecord() {
       this.getCurrentPosition();
+    },
+
+    checkDevice() {
+      let device = navigator.platform;
+      console.log(device);
+      alert(device);
+      
     },
 
     getCurrentPosition() {
