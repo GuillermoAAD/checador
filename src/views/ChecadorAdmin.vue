@@ -65,7 +65,7 @@
           </tr>
 
           <tr id="tr-no-records">
-            <td id="th-no-records" colspan="4">Registros no encontrados.</td>
+            <td id="th-no-records" colspan="5">Registros no encontrados.</td>
           </tr>
         </tbody>
       </table>
